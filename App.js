@@ -8,18 +8,17 @@ import { AuthContext, AuthProvider } from './components/AuthContext';
 export default function App() {
   return (
     <NavigationContainer>
-      <SafeAreaView style={styles.container}>
+      {/* <SafeAreaView style={styles.container}> */}
         <AuthProvider>
           <RootNavigator/>
         </AuthProvider>
-      </SafeAreaView>
+      {/* </SafeAreaView> */}
     </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',

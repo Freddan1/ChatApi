@@ -1,11 +1,10 @@
-import React from 'react'
-import { Text, View } from 'react-native'
+import React, { useContext } from 'react'
 import AppNavigator from './AppNavigator'
 import AuthNavigator from './AuthNavigator'
+import { AuthContext } from './AuthContext'
 
 export default function RootNavigator() {
-
-    const accessToken = null
+  const {accessToken} = useContext(AuthContext)
   return (
     <>
     {
