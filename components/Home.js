@@ -1,13 +1,13 @@
-import React, { useContext, useEffect } from 'react'
-import { Button, Text, View, TouchableOpacity, StyleSheet } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
+import { Button, Text, View, TouchableOpacity, StyleSheet, FlatList } from 'react-native'
 import { AuthContext } from './AuthContext'
 
 
 export default function Home() {
 
-    const {handleLogout} = useContext(AuthContext);
-
-    const {accessToken} = useContext(AuthContext)
+    const {handleLogout, accessToken} = useContext(AuthContext);
+    const [messages, setMessages] = useState([]);
+    
     const handleMessages = async () => {
 
         try {
@@ -22,7 +22,7 @@ export default function Home() {
             const data = await response.json();
 
             if (data.status === 200){
-                console.log(data.data)
+                setMessages(data.data)
             }
 
                 
@@ -34,8 +34,24 @@ export default function Home() {
             handleMessages();
         },[])
         
+        const renderMessages = ({item}) => {
+            return(
+            <View style={styles.messages} key={item._id}>
+                <Text>{item.date}</Text>
+                <Text>{item.content}</Text>
+            </View>
+            )
+        }
+
         return (
         <View style={{flex: 1, backgroundColor: "#fff",}}>
+            <FlatList
+                data={messages}
+                renderItem={renderMessages}
+                keyExtractor={item => item._id}
+            />
+
+
             <TouchableOpacity 
             onPress={handleLogout}
             style={styles.input}
@@ -57,4 +73,7 @@ const styles = StyleSheet.create({
       borderWidth: 1,
       padding: 10,
     },
+    messages: {
+        flex: 1,
+    }
   });
