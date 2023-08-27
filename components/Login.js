@@ -7,9 +7,7 @@ export default function Login( {navigation} ) {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  
   const {handleLogin} = useContext(AuthContext);
-
 
   return (
     <>
@@ -29,6 +27,9 @@ export default function Login( {navigation} ) {
           
         <TouchableOpacity style={styles.input} onPress={() => handleLogin(username, password)}>
             <Text>Login</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.input} onPress={() => navigation.navigate('Register')}>
+            <Text>Or register</Text>
         </TouchableOpacity>
     </>
   )

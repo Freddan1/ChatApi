@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Button, Text, View, TouchableOpacity, StyleSheet, FlatList } from 'react-native'
+import { Button, Text, View, TouchableOpacity, StyleSheet, FlatList, ActionSheetIOS } from 'react-native'
 import { AuthContext } from './AuthContext'
 
 
 export default function Home() {
 
-    const {handleLogout, accessToken} = useContext(AuthContext);
+    const {handleLogout, accessToken, setUsername} = useContext(AuthContext);
     const [messages, setMessages] = useState([]);
-    
     const handleMessages = async () => {
 
         try {
@@ -35,16 +34,22 @@ export default function Home() {
         },[])
         
         const renderMessages = ({item}) => {
+
+            const isSent = item?.user?.username === "Freddan"
+            const bubbleStyle = isSent ? styles.sentBubble : styles.receivedBubble;
             return(
-            <View style={styles.messages} key={item._id}>
-                <Text>{item.date}</Text>
-                <Text>{item.content}</Text>
+                <View style={[styles.messageContainer, isSent ? styles.sentContainer : styles.receivedContainer]} key={item._id}>
+                <View style={[styles.messageBubble, bubbleStyle]}>
+                    <Text style={styles.userName}>{item?.user?.username}</Text>
+                    <Text style={styles.messageText}>{item.content}</Text>
+                    <Text style={styles.messageDate}>{item.date}</Text>
+                </View>
             </View>
             )
         }
 
         return (
-        <View style={{flex: 1, backgroundColor: "#fff",}}>
+        <View style={{flex: 1}}>
             <FlatList
                 data={messages}
                 renderItem={renderMessages}
@@ -73,7 +78,43 @@ const styles = StyleSheet.create({
       borderWidth: 1,
       padding: 10,
     },
-    messages: {
-        flex: 1,
+    messageContainer: {
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        paddingHorizontal: 10,
+        marginTop: 10,
+    },
+    sentContainer: {
+        justifyContent: 'flex-end',
+        alignSelf: 'flex-end',
+    },
+    receivedContainer: {
+        justifyContent: 'flex-start',
+        alignSelf: 'flex-start',
+    },
+    messageBubble: {
+        maxWidth: '70%',
+        padding: 10,
+        borderRadius: 10,
+    },
+    sentBubble: {
+        backgroundColor: '#DCF8C6',
+        alignSelf: 'flex-end',
+    },
+    receivedBubble: {
+        backgroundColor: 'white',
+        alignSelf: 'flex-start'
+    },
+    messageText: {
+        fontSize: 14,
+    },
+    messageDate: {
+        fontSize: 12,
+        marginTop: 5,
+        marginLeft: 10,
+        color: '#888'
+    },
+    userName: {
+        fontSize: 10,
     }
   });
