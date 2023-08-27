@@ -37,7 +37,7 @@ export const  AuthProvider = ({children}) => {
         }
     }
 
-    const register = async (username, password) => {
+    const handleRegister = async (username, password) => {
         try {
             const response = await fetch('https://chat-api-with-auth.up.railway.app/auth/register',
             {
@@ -50,7 +50,12 @@ export const  AuthProvider = ({children}) => {
                     'password': password
                 })
             })
-            // const data = await response.json()  Ej klar med detta
+            const data = await response.json()
+
+            if(data.status === 200){
+                const token = await AsyncStorage.getItem('accessToken')
+                setAccessToken(token)
+            }
 
         } catch (error) {
             console.log(error)
@@ -86,7 +91,7 @@ export const  AuthProvider = ({children}) => {
     },[])
     
     return(
-        <AuthContext.Provider value={{handleLogin, accessToken, handleLogout}}>
+        <AuthContext.Provider value={{handleLogin, accessToken, handleLogout, handleRegister, isLogedIn}}>
             {children}
         </AuthContext.Provider>
     )
