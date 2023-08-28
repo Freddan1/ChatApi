@@ -1,6 +1,6 @@
 
 import React, { useContext, useState } from 'react'
-import { StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { AuthContext } from './AuthContext';
 
 export default function Login( {navigation} ) {
@@ -11,6 +11,8 @@ export default function Login( {navigation} ) {
 
   return (
     <>
+    <View style={styles.container}>
+      
       <TextInput
           placeholder="Username"
           style={styles.input}
@@ -31,6 +33,7 @@ export default function Login( {navigation} ) {
         <TouchableOpacity style={styles.input} onPress={() => navigation.navigate('Register')}>
             <Text>Or register</Text>
         </TouchableOpacity>
+        </View>
     </>
   )
 }
@@ -46,4 +49,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
   },
+  container: {
+    backgroundColor: '#fff',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });
