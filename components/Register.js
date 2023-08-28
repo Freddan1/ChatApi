@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, TextInput, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { AuthContext } from './AuthContext';
 
 
@@ -10,28 +10,30 @@ export default function Register() {
 
   return (
     <>
+    <View style={styles.container}>
       <TextInput 
-      style={styles.register}
+      style={styles.input}
       placeholder="Username"
       value={username}
       onChangeText={setUsername}
       />
       
       <TextInput 
-      style={styles.register}
+      style={styles.input}
       placeholder="Password"
       value={password}
       onChangeText={setPassword}
       />
-      <TouchableOpacity style={styles.register} onPress={() => handleRegister(username, password)}>
+      <TouchableOpacity style={styles.input} onPress={() => handleRegister(username, password)}>
         <Text>Create</Text>
       </TouchableOpacity>
+      </View>
     </>
   )
 }
 
 const styles = StyleSheet.create({
-  register: {
+  input: {
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "white",
@@ -41,4 +43,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
   },
-})
+  container: {
+    backgroundColor: '#fff',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
+});

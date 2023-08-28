@@ -16,7 +16,7 @@ export default function ChatSend() {
         onChangeText={setContent}
         
         />
-        <TouchableOpacity style={styles.create} onPress={() => sendMessage(content)}>
+        <TouchableOpacity style={styles.create} onPress={() => sendMessage(content) && (setContent(""))}>
             <Text>Send</Text> 
         </TouchableOpacity>
         </View>
