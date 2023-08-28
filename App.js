@@ -1,8 +1,9 @@
 import 'react-native-gesture-handler';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import RootNavigator from './components/RootNavigator';
-import { AuthContext, AuthProvider } from './components/AuthContext';
+import { AuthProvider } from './components/AuthContext';
+import DrawerNavigation from './components/DrawerNavigation';
 
 export default function App() {
   return (

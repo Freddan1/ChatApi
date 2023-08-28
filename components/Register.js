@@ -3,7 +3,7 @@ import { Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
 import { AuthContext } from './AuthContext';
 
 
-export default function Register({navigation}) {
+export default function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const {handleRegister} = useContext(AuthContext)
