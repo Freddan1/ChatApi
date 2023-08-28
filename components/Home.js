@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Button, Text, View, TouchableOpacity, StyleSheet, FlatList, ActionSheetIOS } from 'react-native'
+import { Text, View, TouchableOpacity, StyleSheet, FlatList } from 'react-native'
 import { AuthContext } from './AuthContext'
+import ChatSend from './ChatSend';
 
 
 export default function Home() {
 
-    const {handleLogout, accessToken, setUsername} = useContext(AuthContext);
+    const {handleLogout, accessToken} = useContext(AuthContext);
     const [messages, setMessages] = useState([]);
     const handleMessages = async () => {
 
@@ -34,8 +35,8 @@ export default function Home() {
         },[])
         
         const renderMessages = ({item}) => {
-
-            const isSent = item?.user?.username === "Freddan"
+            // console.log(item.user)
+            const isSent = item?.user?.username ==="Freddan"
             const bubbleStyle = isSent ? styles.sentBubble : styles.receivedBubble;
             return(
                 <View style={[styles.messageContainer, isSent ? styles.sentContainer : styles.receivedContainer]} key={item._id}>
@@ -55,8 +56,7 @@ export default function Home() {
                 renderItem={renderMessages}
                 keyExtractor={item => item._id}
             />
-
-
+            <ChatSend/>
             <TouchableOpacity 
             onPress={handleLogout}
             style={styles.input}

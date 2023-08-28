@@ -5,7 +5,6 @@ export const AuthContext = createContext();
 
 export const  AuthProvider = ({children}) => {
     const [accessToken, setAccessToken] = useState(null);
-    console.log(accessToken)
 
     const handleLogin = async(username, password) => {
         console.log('hej')
@@ -62,6 +61,29 @@ export const  AuthProvider = ({children}) => {
         }
     }
             
+    const sendMessage  = async (content) => {
+        try {
+            const respone = await fetch ('https://chat-api-with-auth.up.railway.app/messages',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
+                },
+                body: JSON.stringify({
+                    'content': content
+                })
+            })
+            const data = respone.json();
+
+            if(data.status === 201) {
+                console.log(content)
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
 
     const handleLogout = async () => {
@@ -91,7 +113,7 @@ export const  AuthProvider = ({children}) => {
     },[])
     
     return(
-        <AuthContext.Provider value={{handleLogin, accessToken, handleLogout, handleRegister, isLogedIn}}>
+        <AuthContext.Provider value={{handleLogin, accessToken, handleLogout, handleRegister, isLogedIn, sendMessage}}>
             {children}
         </AuthContext.Provider>
     )
