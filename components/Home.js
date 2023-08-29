@@ -6,7 +6,7 @@ import ChatSend from './ChatSend';
 
 export default function Home() {
 
-    const {handleLogout, accessToken} = useContext(AuthContext);
+    const {accessToken} = useContext(AuthContext);
     const [messages, setMessages] = useState([]);
     const handleMessages = async () => {
 
@@ -20,7 +20,7 @@ export default function Home() {
                 },
             })
             const data = await response.json();
-
+            
             if (data.status === 200){
                 setMessages(data.data)
             }
@@ -35,7 +35,7 @@ export default function Home() {
         },[])
         
         const renderMessages = ({item}) => {
-            // console.log(item.user)
+            console.log(item?.user?._id.username)
             const isSent = item?.user?.username ==="Freddan"
             const bubbleStyle = isSent ? styles.sentBubble : styles.receivedBubble;
             return(
@@ -57,12 +57,6 @@ export default function Home() {
                 keyExtractor={item => item._id}
             />
             <ChatSend/>
-            <TouchableOpacity 
-            onPress={handleLogout}
-            style={styles.input}
-            >
-            <Text>Logout</Text>
-            </TouchableOpacity>
         </View>
   )
 }

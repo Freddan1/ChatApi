@@ -1,15 +1,22 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import React from 'react'
-import { Text } from 'react-native'
-import Home from './Home'
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
-const Stack =createNativeStackNavigator()
+import Home from './Home';
+import Settings from './Settings';
+import { StyleSheet } from 'react-native';
+import CustomDrawer from './CustomDrawer';
 
-export default function AppNavigator() {
+const Drawer = createDrawerNavigator();
+
+function AppNavigator() {
   return (
-
-    <Stack.Navigator>
-      <Stack.Screen style={{flex: 1,}} name="Home" component={Home}/>
-    </Stack.Navigator>
-  )
+    <Drawer.Navigator
+      drawerContent={(props) => <CustomDrawer {...props}/>}
+    >
+      <Drawer.Screen name="Home" component={Home} />
+      <Drawer.Screen name="Settings" component={Settings}/>
+    </Drawer.Navigator>
+  );
 }
+
+
+export default AppNavigator;
