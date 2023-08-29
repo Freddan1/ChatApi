@@ -8,7 +8,7 @@ export default function CustomDrawer(props) {
   return (
     <DrawerContentScrollView {...props}>
       <DrawerItemList {...props} />
-      <View style={styles.flexSpace}/>
+      <View labelStyle={styles.flexSpace}/>
       <DrawerItem labelStyle={styles.label} label="Logout" onPress={() => handleLogout()} />
     </DrawerContentScrollView>
   )
@@ -16,20 +16,19 @@ export default function CustomDrawer(props) {
 
 const styles = StyleSheet.create({
 
-    flexSpace: {
-        flex: 1,
+  flexSpace: {
+    flex: 1,
+  },
 
-    },
-
-    label: { 
-      color: "black",  
-      justifyContent: "center",
-      alignItems: "center",
-      backgroundColor: "white",
-      width: 200,
-      height: 40,
-      margin: 10,
-      borderWidth: 1,
-      padding: 10,
-    },
+  label: { 
+    color: "black",  
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+    width: 200,
+    height: 40,
+    margin: 10,
+    borderWidth: 1,
+    padding: 10,
+  },
 })    

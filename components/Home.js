@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Text, View, TouchableOpacity, StyleSheet, FlatList } from 'react-native'
+import { Text, View, TouchableOpacity, StyleSheet, FlatList, TextInput } from 'react-native'
 import { AuthContext } from './AuthContext'
 import ChatSend from './ChatSend';
 
@@ -8,6 +8,8 @@ export default function Home() {
 
     const {accessToken} = useContext(AuthContext);
     const [messages, setMessages] = useState([]);
+    const [content, setContent] = useState("")
+    
     const handleMessages = async () => {
 
         try {
@@ -29,13 +31,39 @@ export default function Home() {
         } catch (error) {
             console.log('error', error)
             }
+    }
+        
+
+        const sendMessage  = async (content) => {
+            try {
+                const respone = await fetch ('https://chat-api-with-auth.up.railway.app/messages',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json',
+                        'Authorization': `Bearer ${accessToken}`
+                    },
+                    body: JSON.stringify({
+                        'content': content
+                    })
+                })
+                const data = respone.json();
+                console.log(handleMessages(setMessages))
+      
+                if(data.status === 201) {
+                    handleMessages();
+                }
+      
+            } catch (error) {
+                console.log(error)
+            }
         }
+        
         useEffect(()=> {
             handleMessages();
-        },[])
-        
+        },[sendMessage])
+
         const renderMessages = ({item}) => {
-            console.log(item?.user?._id.username)
             const isSent = item?.user?.username ==="Freddan"
             const bubbleStyle = isSent ? styles.sentBubble : styles.receivedBubble;
             return(
@@ -56,7 +84,18 @@ export default function Home() {
                 renderItem={renderMessages}
                 keyExtractor={item => item._id}
             />
-            <ChatSend/>
+            <View style={styles.container}>
+                <TextInput 
+                style={styles.textfield}
+                placeholder="Write something"
+                value={content}
+                onChangeText={setContent}
+            
+                />
+                <TouchableOpacity style={styles.create} onPress={() => sendMessage(content) && (setContent(""))}>
+                    <Text>Send</Text> 
+                </TouchableOpacity>
+            </View>
         </View>
   )
 }
@@ -110,5 +149,28 @@ const styles = StyleSheet.create({
     },
     userName: {
         fontSize: 10,
-    }
+    },
+    textfield: {
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "white",
+        width: 250,
+        height: 40,
+        margin: 11,
+        borderWidth: 1,
+        padding: 10,
+      },
+      container: {
+          flexDirection: "row"
+      },
+      create: {
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "white",
+        width: 60,
+        height: 40,
+        margin: 11,
+        borderWidth: 1,
+        padding: 10,
+      }
   });
