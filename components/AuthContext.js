@@ -5,9 +5,9 @@ export const AuthContext = createContext();
 
 export const  AuthProvider = ({children}) => {
     const [accessToken, setAccessToken] = useState(null);
+    const [user, setUser] = useState("")
 
     const handleLogin = async(username, password) => {
-        console.log('hej')
 
         try {
             const response = await fetch('https://chat-api-with-auth.up.railway.app/auth/token',
@@ -22,7 +22,7 @@ export const  AuthProvider = ({children}) => {
                 })
             })
             const data = await response.json()
-
+            
             if (data.status === 200){
                 await AsyncStorage.setItem('accessToken', data.data.accessToken)
                 setAccessToken(data.data.accessToken)
@@ -35,7 +35,7 @@ export const  AuthProvider = ({children}) => {
             console.log(error)
         }
     }
-
+    
     const handleRegister = async (username, password) => {
         try {
             const response = await fetch('https://chat-api-with-auth.up.railway.app/auth/register',
