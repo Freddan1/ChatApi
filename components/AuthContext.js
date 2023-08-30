@@ -1,11 +1,13 @@
 import React, { createContext, useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Text } from 'react-native';
 
 export const AuthContext = createContext();
 
 export const  AuthProvider = ({children}) => {
     const [accessToken, setAccessToken] = useState(null);
-    const [user, setUser] = useState("")
+    const [userID, setUserID] = useState("")
+    const [messageInfo, setMessageInfo] = useState("")
 
     const handleLogin = async(username, password) => {
 
@@ -26,6 +28,7 @@ export const  AuthProvider = ({children}) => {
             if (data.status === 200){
                 await AsyncStorage.setItem('accessToken', data.data.accessToken)
                 setAccessToken(data.data.accessToken)
+                setUserID(data.data._id)
             }
             else{
                 console.log('fel')
@@ -37,6 +40,7 @@ export const  AuthProvider = ({children}) => {
     }
     
     const handleRegister = async (username, password) => {
+        setMessageInfo("")
         try {
             const response = await fetch('https://chat-api-with-auth.up.railway.app/auth/register',
             {
@@ -54,12 +58,25 @@ export const  AuthProvider = ({children}) => {
             if(data.status === 200){
                 const token = await AsyncStorage.getItem('accessToken')
                 setAccessToken(token)
+                setMessageInfo(<Text style = {{color: 'green'}}>{data.message}</Text>)
+                setTimeout(()=> {
+                    setMessageInfo("")
+                },3000)
+            }
+            if(data.status === 409) {
+                setMessageInfo(<Text style = {{color: 'red'}}>{data.message}</Text>)
+                setTimeout(()=> {
+                    setMessageInfo("")
+                },3000)
             }
 
         } catch (error) {
             console.log(error)
         }
     }
+    useEffect(()=> {
+        setMessageInfo()
+    },[])
             
 
     const handleLogout = async () => {
@@ -89,7 +106,7 @@ export const  AuthProvider = ({children}) => {
     },[])
     
     return(
-        <AuthContext.Provider value={{handleLogin, accessToken, handleLogout, handleRegister, isLogedIn}}>
+        <AuthContext.Provider value={{handleLogin, accessToken, handleLogout, handleRegister, isLogedIn, userID, messageInfo}}>
             {children}
         </AuthContext.Provider>
     )

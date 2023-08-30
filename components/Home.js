@@ -6,7 +6,7 @@ import ChatSend from './ChatSend';
 
 export default function Home() {
 
-    const {accessToken} = useContext(AuthContext);
+    const {accessToken,userId} = useContext(AuthContext);
     const [messages, setMessages] = useState([]);
     const [content, setContent] = useState("")
     
@@ -48,7 +48,7 @@ export default function Home() {
                     })
                 })
                 const data = respone.json();
-                console.log(handleMessages(setMessages))
+                
       
                 if(data.status === 201) {
                     handleMessages();
@@ -61,10 +61,11 @@ export default function Home() {
         
         useEffect(()=> {
             handleMessages();
-        },[sendMessage])
+        },[])
 
         const renderMessages = ({item}) => {
-            const isSent = item?.user?.username ==="Freddan"
+            // console.log(userId)
+            const isSent = item?.user?.username === "Freddan"
             const bubbleStyle = isSent ? styles.sentBubble : styles.receivedBubble;
             return(
                 <View style={[styles.messageContainer, isSent ? styles.sentContainer : styles.receivedContainer]} key={item._id}>
