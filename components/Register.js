@@ -6,7 +6,7 @@ import { AuthContext } from './AuthContext';
 export default function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const {handleRegister} = useContext(AuthContext)
+  const {handleRegister, messageInfo} = useContext(AuthContext)
 
   return (
     <>
@@ -24,9 +24,16 @@ export default function Register() {
       value={password}
       onChangeText={setPassword}
       />
-      <TouchableOpacity style={styles.input} onPress={() => handleRegister(username, password)}>
+      <TouchableOpacity 
+      style={styles.input} 
+      onPress={() => handleRegister(username, password)}
+      
+      >
         <Text>Create</Text>
       </TouchableOpacity>
+      {
+        messageInfo && <Text>{messageInfo}</Text>
+      }
       </View>
     </>
   )
@@ -48,5 +55,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  message:{
+    color: "red",
   }
 });
