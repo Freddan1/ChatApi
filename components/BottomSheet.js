@@ -5,7 +5,9 @@ const {height: SCREEN_HEIGHT} = Dimensions.get('window');
 
 export default function BottomSheet() {
   return (
-    <View style={styles.bottomSheetContainer}/>
+    <View style={styles.bottomSheetContainer}>
+      <Text>Vill du ta bort meddelande?</Text>
+    </View>
   )
 }
 

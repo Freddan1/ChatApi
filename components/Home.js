@@ -9,6 +9,7 @@ export default function Home() {
     const {accessToken,userID} = useContext(AuthContext);
     const [messages, setMessages] = useState([]);
     const [content, setContent] = useState("")
+    const [selectedMessage, setSelectedMessage] = useState(null)
     
     const handleMessages = async () => {
 
@@ -61,19 +62,32 @@ export default function Home() {
         
         useEffect(()=> {
             handleMessages();
-        },)
+        },[])
 
         const renderMessages = ({item}) => {
             const isSent = item?.user?._id === userID
             const bubbleStyle = isSent ? styles.sentBubble : styles.receivedBubble;
+            const handlePress = () => {
+                if (selectedMessage === item._id) {
+                    setSelectedMessage(null)
+                }
+                else {
+                    setSelectedMessage(item._id)
+                }
+            }
             return(
-                <View style={[styles.messageContainer, isSent ? styles.sentContainer : styles.receivedContainer]} key={item._id}>
-                <View style={[styles.messageBubble, bubbleStyle]}>
-                    <Text style={styles.userName}>{item?.user?.username}</Text>
-                    <Text style={styles.messageText}>{item.content}</Text>
-                    <Text style={styles.messageDate}>{item.date}</Text>
-                </View>
-            </View>
+                <TouchableOpacity onPress={handlePress}>
+                    <View 
+                    style={[styles.messageContainer, isSent ? styles.sentContainer : styles.receivedContainer]} 
+                    key={item._id}
+                    >
+                    <View style={[styles.messageBubble, bubbleStyle]}>
+                        <Text style={styles.userName}>{item?.user?.username}</Text>
+                        <Text style={styles.messageText}>{item.content}</Text>
+                        <Text style={styles.messageDate}>{item.date}</Text>
+                    </View>
+                    </View>
+                </TouchableOpacity>
             )
         }
 
@@ -93,12 +107,21 @@ export default function Home() {
                 onChangeText={setContent}
             
                 />
-                <TouchableOpacity style={styles.create} onPress={() => sendMessage(content) && (setContent(""))}>
+                <TouchableOpacity 
+                    style={styles.create} 
+                    onPress={() => sendMessage(content) && (setContent(""))}
+                    >
                     <Text>Send</Text> 
                 </TouchableOpacity>
             </View>
         </View>
-        {/* <BottomSheet/> */}
+        {
+            selectedMessage !== null && (
+                <BottomSheet
+                    // userID={selectedMessage}
+                    // onPress = {() => setSelectedMessage(null)}
+                />
+            )}
         </>
   )
 }
