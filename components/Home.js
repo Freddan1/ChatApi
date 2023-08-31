@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Text, View, TouchableOpacity, StyleSheet, FlatList, TextInput } from 'react-native'
 import { AuthContext } from './AuthContext'
-import ChatSend from './ChatSend';
+import BottomSheet from './BottomSheet';
 
 
 export default function Home() {
 
-    const {accessToken,userId} = useContext(AuthContext);
+    const {accessToken,userID} = useContext(AuthContext);
     const [messages, setMessages] = useState([]);
     const [content, setContent] = useState("")
     
@@ -51,7 +51,7 @@ export default function Home() {
                 
       
                 if(data.status === 201) {
-                    handleMessages();
+                    // handleMessages();
                 }
       
             } catch (error) {
@@ -61,11 +61,10 @@ export default function Home() {
         
         useEffect(()=> {
             handleMessages();
-        },[])
+        },)
 
         const renderMessages = ({item}) => {
-            // console.log(userId)
-            const isSent = item?.user?.username === "Freddan"
+            const isSent = item?.user?._id === userID
             const bubbleStyle = isSent ? styles.sentBubble : styles.receivedBubble;
             return(
                 <View style={[styles.messageContainer, isSent ? styles.sentContainer : styles.receivedContainer]} key={item._id}>
@@ -79,6 +78,7 @@ export default function Home() {
         }
 
         return (
+        <>
         <View style={{flex: 1}}>
             <FlatList
                 data={messages}
@@ -98,6 +98,8 @@ export default function Home() {
                 </TouchableOpacity>
             </View>
         </View>
+        {/* <BottomSheet/> */}
+        </>
   )
 }
 
