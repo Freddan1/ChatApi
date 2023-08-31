@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { createContext, useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Text } from 'react-native';
@@ -8,6 +9,7 @@ export const  AuthProvider = ({children}) => {
     const [accessToken, setAccessToken] = useState(null);
     const [userID, setUserID] = useState("")
     const [messageInfo, setMessageInfo] = useState("")
+    const navigation = useNavigation()
 
     const handleLogin = async(username, password) => {
 
@@ -27,6 +29,7 @@ export const  AuthProvider = ({children}) => {
             
             if (data.status === 200){
                 await AsyncStorage.setItem('accessToken', data.data.accessToken)
+                await AsyncStorage.setItem('userID', data.data._id)
                 setAccessToken(data.data.accessToken)
                 setUserID(data.data._id)
             }
@@ -57,14 +60,18 @@ export const  AuthProvider = ({children}) => {
 
             if(data.status === 200){
                 const token = await AsyncStorage.getItem('accessToken')
+                const Id = await AsyncStorage.getItem('userID')
                 setAccessToken(token)
+                setUserID(Id)
+                
                 setMessageInfo(<Text style = {{color: 'green'}}>{data.message}</Text>)
                 setTimeout(()=> {
+                    navigation.navigate("Login")
                     setMessageInfo("")
                 },3000)
             }
             if(data.status === 409) {
-                setMessageInfo(<Text style = {{color: 'red'}}>{data.message}</Text>)
+                setMessageInfo(<Text style = {{color: 'red', position: 'absolute', top: "500"}}>{data.message}</Text>)
                 setTimeout(()=> {
                     setMessageInfo("")
                 },3000)
@@ -84,6 +91,8 @@ export const  AuthProvider = ({children}) => {
 
         try {
             await AsyncStorage.removeItem('accessToken')
+            await AsyncStorage.removeItem('userID')
+            setUserID(null)
             setAccessToken(null)
         } catch (error) {
             console.log(error)
@@ -95,7 +104,9 @@ export const  AuthProvider = ({children}) => {
 
         try {
             const token = await AsyncStorage.getItem('accessToken')
+            const Id = await AsyncStorage.getItem('userID')
             setAccessToken(token)
+            setUserID(Id)
         } catch (error){
             console.log(error)
         }
