@@ -35,9 +35,9 @@ export default function Home() {
     }
         
 
-        const sendMessage  = async (content) => {
+        const sendMessage  = async (messageContent) => {
             try {
-                const respone = await fetch ('https://chat-api-with-auth.up.railway.app/messages',
+                const response = await fetch ('https://chat-api-with-auth.up.railway.app/messages',
                 {
                     method: 'POST',
                     headers: {
@@ -45,37 +45,49 @@ export default function Home() {
                         'Authorization': `Bearer ${accessToken}`
                     },
                     body: JSON.stringify({
-                        'content': content
+                        'content': messageContent
                     })
                 })
-                const data = respone.json();
-                
+                const data = await response.json();
+                console.log(data)
       
                 if(data.status === 201) {
-                    // handleMessages();
+                    handleMessages();
+                    
                 }
       
             } catch (error) {
                 console.log(error)
             }
         }
-        
         useEffect(()=> {
-            handleMessages();
+            const interval = setInterval(()=> {
+                handleMessages();
+            },5000);
+            return() => {
+                clearInterval(interval)
+            }
         },[])
+        
 
         const renderMessages = ({item}) => {
             const isSent = item?.user?._id === userID
             const bubbleStyle = isSent ? styles.sentBubble : styles.receivedBubble;
             const handlePress = () => {
+              if(isSent) {
                 if (selectedMessage === item._id) {
                     setSelectedMessage(null)
+                    console.log(item._id)
                 }
                 else {
                     setSelectedMessage(item._id)
+                    console.log(item._id)
                 }
+              }  
             }
+            
             return(
+                <>
                 <TouchableOpacity onPress={handlePress}>
                     <View 
                     style={[styles.messageContainer, isSent ? styles.sentContainer : styles.receivedContainer]} 
@@ -88,9 +100,13 @@ export default function Home() {
                     </View>
                     </View>
                 </TouchableOpacity>
+                
+                </>
             )
         }
-
+        const closeBottomSheet = () => {
+            setSelectedMessage(null)
+        }
         return (
         <>
         <View style={{flex: 1}}>
@@ -114,14 +130,15 @@ export default function Home() {
                     <Text>Send</Text> 
                 </TouchableOpacity>
             </View>
-        </View>
-        {
+            {
             selectedMessage !== null && (
                 <BottomSheet
-                    // userID={selectedMessage}
-                    // onPress = {() => setSelectedMessage(null)}
+                    messageId={selectedMessage}
+                    handleMessages={handleMessages}
+                    onClose={closeBottomSheet}
                 />
             )}
+        </View>
         </>
   )
 }
