@@ -1,14 +1,44 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
+import { AuthContext } from './AuthContext';
 
 const {height: SCREEN_HEIGHT} = Dimensions.get('window');
 
-export default function BottomSheet() {
+export default function BottomSheet({messageId, handleMessages,onClose}) {
+  console.log(messageId)
+  const {accessToken} = useContext(AuthContext)
+  const deleteMessage = async () => {
+    try {
+      const response = await fetch ('https://chat-api-with-auth.up.railway.app/messages/'+messageId,
+      {
+        method: 'DELETE',
+        headers: {
+            'Content-type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+        },
+      })
+      const data = await response.json();
+      
+      console.log(data)
+
+      if(data.status === 200) {
+        handleMessages();
+        onClose();
+          console.log("deleted")
+      }
+
+  } catch (error) {
+      console.log(error)
+  }
+  useEffect(()=> {
+    handleMessages();
+  })
+}
   return (
     <View style={styles.bottomSheetContainer}>
       <View style={styles.container}>
-      <AntDesign name="delete" size={24} color="black" />
+      <AntDesign name="delete" size={24} color="black" onPress={() => deleteMessage()} />
       </View>
     </View>
   )
