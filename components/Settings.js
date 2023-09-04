@@ -2,16 +2,31 @@ import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Profile from './Profile';
 import Camera from './Camera';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
-function Settings() {
+export default function Settings() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Profile" component={Profile}/>
-      <Tab.Screen name="Camera" component={Camera} />
+      <Tab.Screen name="Profile" component={Profile} options={{
+        tabBarActiveBackgroundColor: "grey",
+        tabBarShowLabel: false,
+        tabBarIcon: ({}) => (
+          <Feather name="user" size={24} color="black" />
+        )
+      }}/>
+      <Tab.Screen name="Camera" component={Camera} options={{
+        tabBarActiveBackgroundColor: "grey",
+        tabBarShowLabel: false,
+        tabBarIcon:  ({}) => (
+          <Ionicons name="camera" size={24} color="black" />
+        )
+        
+      }}/>
     </Tab.Navigator>
   );
 }
-export default Settings
+
+
