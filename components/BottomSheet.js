@@ -6,8 +6,8 @@ import { AuthContext } from './AuthContext';
 const {height: SCREEN_HEIGHT} = Dimensions.get('window');
 
 export default function BottomSheet({messageId, handleMessages,onClose}) {
-  console.log(messageId)
   const {accessToken} = useContext(AuthContext)
+
   const deleteMessage = async () => {
     try {
       const response = await fetch ('https://chat-api-with-auth.up.railway.app/messages/'+messageId,
@@ -25,7 +25,6 @@ export default function BottomSheet({messageId, handleMessages,onClose}) {
       if(data.status === 200) {
         handleMessages();
         onClose();
-          console.log("deleted")
       }
 
   } catch (error) {

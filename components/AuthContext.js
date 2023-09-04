@@ -12,7 +12,7 @@ export const  AuthProvider = ({children}) => {
     const navigation = useNavigation()
 
     const handleLogin = async(username, password) => {
-
+        setMessageInfo("")
         try {
             const response = await fetch('https://chat-api-with-auth.up.railway.app/auth/token',
             {
@@ -26,20 +26,26 @@ export const  AuthProvider = ({children}) => {
                 })
             })
             const data = await response.json()
+            console.log(data.data.username , "yoyo")
             
             if (data.status === 200){
                 await AsyncStorage.setItem('accessToken', data.data.accessToken)
                 await AsyncStorage.setItem('userID', data.data._id)
                 setAccessToken(data.data.accessToken)
                 setUserID(data.data._id)
+                
             }
             else{
+                setMessageInfo(<Text style = {{color: 'red'}}>{data.message}</Text>)
                 console.log('fel')
             }
 
         } catch(error){
             console.log(error)
         }
+        setTimeout(()=>{
+            setMessageInfo("")
+        },3000)
     }
     
     const handleRegister = async (username, password) => {
