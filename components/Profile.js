@@ -2,11 +2,31 @@ import React, { useContext, useState } from 'react'
 import { Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native'
 import { AuthContext } from './AuthContext'
 
-export default function Profile() {
+export default function Profile(username) {
 
   const {accessToken, handleLogout} = useContext(AuthContext)
   const [messageInfo, setMessageInfo] = useState("")
-  
+
+  const fetchUser = async () => {
+    try {
+      const response = await fetch ('https://chat-api-with-auth.up.railway.app/users',
+      {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
+        },
+      })
+      const data = await response.json()
+
+
+      console.log(data, "Data?")
+
+    } catch(error) {
+      console.log(error)
+    }
+  }
+  fetchUser()
   const deleteUser = async () => {
     setMessageInfo("")
     try {
@@ -39,7 +59,7 @@ export default function Profile() {
       <TextInput
           placeholder="User name"
           style={styles.input}
-          value={data.data.username}
+          // value={user}
           // onChangeText={setUsername}
 
         />
@@ -57,9 +77,13 @@ export default function Profile() {
           // onChangeText={setPassword}
         />
           
-        <TouchableOpacity style={styles.input} onPress={() => handleLogin(username, password)}>
+        <TouchableOpacity style={styles.input} 
+        onPress={() => handleLogin(username, password)}
+        
+        >
             <Text>Add full name to profile</Text>
         </TouchableOpacity>
+
         <TouchableOpacity style={styles.inputDelete} onPress={() => deleteUser()}>
             <Text>Delete account</Text>
         </TouchableOpacity>
