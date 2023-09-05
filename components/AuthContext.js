@@ -26,14 +26,12 @@ export const  AuthProvider = ({children}) => {
                 })
             })
             const data = await response.json()
-            console.log(data.data.username , "yoyo")
             
             if (data.status === 200){
                 await AsyncStorage.setItem('accessToken', data.data.accessToken)
                 await AsyncStorage.setItem('userID', data.data._id)
                 setAccessToken(data.data.accessToken)
                 setUserID(data.data._id)
-                
             }
             else{
                 setMessageInfo(<Text style = {{color: 'red'}}>{data.message}</Text>)
@@ -74,7 +72,7 @@ export const  AuthProvider = ({children}) => {
                 setTimeout(()=> {
                     navigation.navigate("Login")
                     setMessageInfo("")
-                },3000)
+                },1000)
             }
             if(data.status === 409) {
                 setMessageInfo(<Text style = {{color: 'red', position: 'absolute', top: "500"}}>{data.message}</Text>)

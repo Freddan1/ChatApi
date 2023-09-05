@@ -1,13 +1,14 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native'
 import { AuthContext } from './AuthContext'
 
-export default function Profile(username) {
+export default function Profile() {
 
   const {accessToken, handleLogout} = useContext(AuthContext)
   const [messageInfo, setMessageInfo] = useState("")
+  const [usernameData, setUsernameData] = useState({username: '', firstname: '', lastname: ''})
 
-  const fetchUser = async () => {
+  const fetchUser = async (firstname, lastname) => {
     try {
       const response = await fetch ('https://chat-api-with-auth.up.railway.app/users',
       {
@@ -19,14 +20,49 @@ export default function Profile(username) {
       })
       const data = await response.json()
 
-
-      console.log(data, "Data?")
+      setUsernameData({
+        username: data.data.username,
+        firstname: data.data.firstname,
+        lastname: data.data.lastname
+      });
 
     } catch(error) {
       console.log(error)
     }
   }
-  fetchUser()
+  
+  
+  const updateUser = async () => {
+    try{
+      const response = await fetch ('https://chat-api-with-auth.up.railway.app/users',
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: JSON.stringify({
+          firstname: usernameData.firstname, 
+          lastname: usernameData.lastname
+        }),
+      });
+      
+      const data = await response.json()
+      if(data.status === 200){
+        setMessageInfo(<Text style={{color: "green"}}>User information has been updated</Text>)
+        fetchUser() 
+        setTimeout(()=> {
+          setMessageInfo("");
+        },1500)
+      }
+    } catch(error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    fetchUser()
+  },[])
+
   const deleteUser = async () => {
     setMessageInfo("")
     try {
@@ -59,29 +95,29 @@ export default function Profile(username) {
       <TextInput
           placeholder="User name"
           style={styles.input}
-          // value={user}
-          // onChangeText={setUsername}
+          value={usernameData.username}
+          onChangeText={(text) => setUsernameData({...usernameData, username: text})}
 
         />
       <TextInput
           placeholder="First name"
           style={styles.input}
-          // value={username}
-          // onChangeText={setUsername}
+          value={usernameData.firstname}
+          onChangeText={(text) => setUsernameData({...usernameData, firstname: text})}
 
         />
         <TextInput
           placeholder='Last name'
           style={styles.input}
-          // value={password}
-          // onChangeText={setPassword}
+          value={usernameData.lastname}
+          onChangeText={(text) => setUsernameData({...usernameData, lastname: text})}
         />
           
         <TouchableOpacity style={styles.input} 
-        onPress={() => handleLogin(username, password)}
+        onPress={() => updateUser()}
         
         >
-            <Text>Add full name to profile</Text>
+            <Text>Update user information</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.inputDelete} onPress={() => deleteUser()}>
