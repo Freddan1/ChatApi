@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Text, View, TouchableOpacity, StyleSheet, FlatList, TextInput } from 'react-native'
+import { Text, View, TouchableOpacity, StyleSheet, FlatList, TextInput, Image } from 'react-native'
 import { AuthContext } from './AuthContext'
 import BottomSheet from './BottomSheet';
 
@@ -27,7 +27,7 @@ export default function Home() {
             if (data.status === 200){
                 setMessages(data.data)
             }
-
+            
                 
         } catch (error) {
             console.log('error', error)
@@ -94,6 +94,10 @@ export default function Home() {
                     key={item._id}
                     >
                     <View style={[styles.messageBubble, bubbleStyle]}>
+                        <Image 
+                            source={{ uri: item?.user?.image }}
+                            style={styles.userImage}
+                            />
                         <Text style={styles.userName}>{item?.user?.username}</Text>
                         <Text style={styles.messageText}>{item.content}</Text>
                         <Text style={styles.messageDate}>{item.date}</Text>
@@ -215,5 +219,9 @@ const styles = StyleSheet.create({
         margin: 11,
         borderWidth: 1,
         padding: 10,
+      },
+      userImage: {
+        height: 50,
+        width: 50,
       }
   });
