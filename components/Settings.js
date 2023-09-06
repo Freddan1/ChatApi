@@ -1,7 +1,7 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Profile from './Profile';
-import Camera from './Camera';
+import CameraView from './CameraView';
 import { Feather } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -17,7 +17,7 @@ export default function Settings() {
           <Feather name="user" size={24} color="black" />
         )
       }}/>
-      <Tab.Screen name="Camera" component={Camera} options={{
+      <Tab.Screen name="Camera" component={CameraView} options={{
         tabBarActiveBackgroundColor: "grey",
         tabBarShowLabel: false,
         tabBarIcon:  ({}) => (
