@@ -4,9 +4,13 @@ import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-na
 import { Camera, CameraType, FlashMode } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import ImagePreview from './ImagePreview';
+import { useIsFocused } from '@react-navigation/native';
+
+
 
 
 export default function CameraView() {
+  const isFocused = useIsFocused()
 
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [hasMediaPermission, setHasMediaPermission] = useState(null);
@@ -53,18 +57,25 @@ export default function CameraView() {
   if(picture){
     return <ImagePreview picture={picture} setPicture={setPicture}/>
 
+  }  
+  if(!isFocused){
+    return null
+
   } else {
 
     return (
       <SafeAreaView style={styles.container}>
         <Camera style={styles.cameraContainer} type={type} flashMode={flash} ref={cameraRef}>
           <View style={styles.buttonsTopContainer}>
+
             <TouchableOpacity style={styles.generalButton}>
               <FontAwesome name="refresh" size={24} color="white" onPress={() => toggleCameraType()}/>
             </TouchableOpacity>
+
             <TouchableOpacity style={styles.generalButton}>
               <Entypo name="flash" size={24} color={flash === FlashMode.on ? "yellow" : "white"} onPress={() => toggleFlash()}/>
             </TouchableOpacity>
+
           </View>
           <View style={styles.buttonsBottomContainer}>
             <TouchableOpacity style={styles.cameraButton}>

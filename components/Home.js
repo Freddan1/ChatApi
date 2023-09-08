@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Text, View, TouchableOpacity, StyleSheet, FlatList, TextInput, Image } from 'react-native'
 import { AuthContext } from './AuthContext'
 import BottomSheet from './BottomSheet';
@@ -111,13 +111,18 @@ export default function Home() {
         const closeBottomSheet = () => {
             setSelectedMessage(null)
         }
+        const flatListRef = useRef(null);
+
         return (
         <>
         <View style={{flex: 1}}>
             <FlatList
+                ref={flatListRef}
                 data={messages}
                 renderItem={renderMessages}
                 keyExtractor={item => item._id}
+                onContentSizeChange={() => flatListRef.current.scrollToEnd({ animated: true })}
+                onLayout={() => flatListRef.current.scrollToEnd({ animated: true })}
             />
             <View style={styles.container}>
                 <TextInput 
@@ -221,7 +226,7 @@ const styles = StyleSheet.create({
         padding: 10,
       },
       userImage: {
-        height: 50,
-        width: 50,
+        height: 10,
+        width: 10,
       }
   });
