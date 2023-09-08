@@ -2,8 +2,10 @@ import { AntDesign, Entypo } from '@expo/vector-icons';
 import React, { useContext, useState } from 'react'
 import { Image, SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
+import { useNavigation } from '@react-navigation/native';
 
 export default function ImagePreview({picture, setPicture}) {
+  const navigation = useNavigation()
     const savePicture = async () => {
         try {
           const asset = await MediaLibrary.createAssetAsync(picture.uri)
@@ -14,7 +16,9 @@ export default function ImagePreview({picture, setPicture}) {
           } else {
             await MediaLibrary.addAssetsToAlbumAsync(asset, album.id, false);
           }
-    
+          
+          navigation.navigate("Profile")
+
           setPicture(null)
         } catch (error) {
           console.log(error)
@@ -24,13 +28,17 @@ export default function ImagePreview({picture, setPicture}) {
   return (
     <SafeAreaView style={styles.container}>
         <Image source={{uri: picture.uri}} style={{flex: 1}}/>
+
         <View style={styles.buttonsContainer}>
+
         <TouchableOpacity style={styles.generalButton}>
             <AntDesign name="delete" size={30} color="white" onPress={() => setPicture(null)}/>
         </TouchableOpacity>
+
         <TouchableOpacity style={styles.generalButton}>
-            <Entypo name="check" size={30} color="white" onPress={() => savePicture()} />
+            <Entypo name="check" size={30} color="white" onPress={() => savePicture()}/>
         </TouchableOpacity>
+
         </View>
     </SafeAreaView>
   )

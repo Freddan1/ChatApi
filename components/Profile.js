@@ -113,15 +113,12 @@ export default function Profile() {
           onChangeText={(text) => setUsernameData({...usernameData, lastname: text})}
         />
           
-        <TouchableOpacity style={styles.input} 
-        onPress={() => updateUser()}
-        
-        >
-            <Text>Update user information</Text>
+        <TouchableOpacity style={styles.input} onPress={() => updateUser()}>
+          <Text>Update user information</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.inputDelete} onPress={() => deleteUser()}>
-            <Text>Delete account</Text>
+          <Text>Delete account</Text>
         </TouchableOpacity>
         {
           messageInfo && <Text>{messageInfo}</Text>
